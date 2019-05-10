@@ -1,0 +1,21 @@
+package chapter04.accumRules
+
+import org.drools.devguide.eshop.model.Order;
+import org.drools.devguide.eshop.model.OrderLine;
+
+rule "10+ items with sale price over 20 get discount"
+    when
+        $o: Order($lines: orderLines)
+        Number(intValue >= 10) from accumulate(
+            OrderLine(
+                item.salePrice > 20.00, 
+                $q: quantity
+            ) from $lines,
+            init(int count = 0;),
+            action(count += $q;),
+            reverse(count -= $q;),
+            result(count)
+        )
+    then
+        $o.increaseDiscount(0.05);
+end

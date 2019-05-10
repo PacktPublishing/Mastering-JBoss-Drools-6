@@ -1,0 +1,12 @@
+package chapter09.accumulate;
+
+import org.drools.devguide.eshop.model.Customer;
+import org.drools.devguide.eshop.model.Order;
+
+rule "Sample Rule 1"
+when
+    $c: Customer()
+    accumulate( Order(customer == $c), $n: count(1))
+then
+    channels["audit-channel"].send($n);
+end

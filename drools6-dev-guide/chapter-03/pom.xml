@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.drools.devguide</groupId>
+        <artifactId>drools6-dev-guide-parent</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+   
+    <artifactId>chapter-03</artifactId>
+    
+    <packaging>pom</packaging>
+    <name>Drools 6 Developer Guide - Chapter 3 Parent</name>
+    <modules>
+        <module>chapter-03-kjar-simple-discounts</module>
+        <module>chapter-03-kjar-premium-discounts</module>
+        <module>chapter-03-kjar-parent</module>
+        <module>chapter-03-classpath-tests</module>
+        <module>chapter-03-maven-tests</module>
+    </modules>
+</project>

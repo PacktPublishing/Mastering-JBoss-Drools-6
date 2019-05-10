@@ -1,0 +1,20 @@
+/**
+This DRL shows how to define a function and how to use in in the RHS of a rule.
+**/
+package chapter05.functions;
+
+import org.drools.devguide.eshop.model.Customer;
+
+global java.util.List globalList;
+
+function String formatCustomer(Customer c){
+    return String.format(
+                "[%s] %s", c.getCategory(), c.getName());
+}
+
+rule "Prepare Customers List"
+when
+    $c: Customer()
+then
+    globalList.add(formatCustomer($c));
+end

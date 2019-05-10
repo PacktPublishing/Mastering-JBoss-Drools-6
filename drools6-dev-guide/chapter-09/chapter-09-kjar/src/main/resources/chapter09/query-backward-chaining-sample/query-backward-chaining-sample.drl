@@ -1,0 +1,26 @@
+package chapter09.query.backward;
+
+import org.drools.devguide.eshop.model.Item;
+import org.drools.devguide.eshop.model.Item.Category;
+import org.drools.devguide.eshop.model.Order;
+import org.drools.devguide.eshop.model.OrderLine;
+import org.drools.devguide.chapter09.model.IsPartOf;
+
+
+query isItemContainedIn(Item p, Item w) 
+    IsPartOf(w, p;)
+    or (IsPartOf(x, p;) and isItemContainedIn(x, w;))
+end
+
+rule "Apply discount to orders with related items"
+no-loop true
+when
+    $o: Order()
+    exists (
+        OrderLine($item1 := item) from $o.orderLines and
+        OrderLine($item2 := item) from $o.orderLines and
+        isItemContainedIn($item1, $item2;)
+    )
+then
+    modify ($o){ increaseDiscount(0.05) };
+end

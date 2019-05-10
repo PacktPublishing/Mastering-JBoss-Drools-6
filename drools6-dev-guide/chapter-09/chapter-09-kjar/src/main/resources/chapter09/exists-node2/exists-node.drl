@@ -1,0 +1,10 @@
+package chapter09.exists;
+
+import org.drools.devguide.eshop.model.SuspiciousOperation;
+
+rule "Sample Rule 1"
+when
+    exists SuspiciousOperation()
+then
+    channels["audit-channel"].send("FAIL");
+end

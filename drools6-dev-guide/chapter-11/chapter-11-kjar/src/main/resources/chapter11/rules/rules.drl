@@ -1,0 +1,63 @@
+package chapter11.rules;
+
+import org.drools.devguide.eshop.model.Coupon;
+import org.drools.devguide.eshop.model.Customer;
+import org.drools.devguide.eshop.model.Discount;
+import org.drools.devguide.eshop.model.Item;
+import org.drools.devguide.eshop.model.Order;
+import org.drools.devguide.eshop.model.OrderLine;
+
+rule "Classify Customer by order size"
+    when
+        $o: Order( orderLines.size >= 5, $customer: customer ) and
+        $c: Customer(this == $customer, category == Customer.Category.NA)
+    then
+        $c.setCategory(Customer.Category.SILVER);
+        update($c);
+end 
+
+rule "Classify Item - Low Range"
+    when
+        $i: Item( cost <= 200, category == Category.NA )
+    then
+        $i.setCategory(Item.Category.LOW_RANGE);
+        update($i);
+end
+
+rule "Classify Item - Mid Range"
+    when
+        $i: Item( cost > 200 && cost < 500, category == Category.NA )
+    then
+        $i.setCategory(Item.Category.MID_RANGE);
+        update($i);
+end
+
+rule "Classify Item - High Range"
+    when
+        $i: Item( cost >= 500, category == Category.NA )
+    then
+        $i.setCategory(Item.Category.HIGH_RANGE);
+        update($i);
+end
+
+rule "Create Coupons for Silver Customers"
+    when
+        $o: Order( $customer: customer )
+        $c: Customer(this == $customer, category == Category.SILVER )
+    then
+        insert(new Coupon($c, $o, Coupon.CouponType.POINTS));        
+end 
+
+rule "Silver Customers + High Range Order - 10% Discount"
+    when
+        
+        $o: Order( $lines : orderLines.size >= 2, $customer: customer, discount == null )
+        $c: Customer( category == Category.SILVER, this == $customer )
+        forall( OrderLine( this memberOf $lines,  $item : item)
+                Item(this == $item, category == Item.Category.HIGH_RANGE)
+        )
+    then
+        $o.setDiscount(new Discount(10.0));
+        update($o);
+end
+

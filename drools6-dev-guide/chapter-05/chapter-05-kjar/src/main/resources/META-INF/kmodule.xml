@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kmodule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://jboss.org/kie/6.0.0/kmodule">
+    <configuration>
+        <property key="drools.evaluator.containsItem" value="org.drools.devguide.chapter05.evaluator.ContainsItemEvaluatorDefinition"/>
+    </configuration>
+    <kbase name="globals1KBase" packages="chapter05.globals-1">
+        <ksession name="globals1Ksession"/>
+    </kbase>
+    <kbase name="globals2KBase" packages="chapter05.globals-2">
+        <ksession name="globals2Ksession"/>
+    </kbase>
+    <kbase name="globals3KBase" packages="chapter05.globals-3">
+        <ksession name="globals3Ksession"/>
+    </kbase>
+    <kbase name="globals4KBase" packages="chapter05.globals-4">
+        <ksession name="globals4Ksession"/>
+    </kbase>
+    <kbase name="globals5KBase" packages="chapter05.globals-5">
+        <ksession name="globals5Ksession"/>
+    </kbase>
+    <kbase name="channelsKBase" packages="chapter05.channels">
+        <ksession name="channelsKsession"/>
+    </kbase>
+    <kbase name="queriesKBase" packages="chapter05.queries">
+        <ksession name="queriesKsession"/>
+    </kbase>
+    <kbase name="functions1KBase" packages="chapter05.functions-1">
+        <ksession name="functions1Ksession"/>
+    </kbase>
+    <kbase name="functions2KBase" packages="chapter05.functions-2">
+        <ksession name="functions2Ksession"/>
+    </kbase>
+    <kbase name="customOperatorKBase" packages="chapter05.customOperator">
+        <ksession name="customOperatorKsession"/>
+    </kbase>
+    <kbase name="customAccFunctionKBase" packages="chapter05.customAccFunction">
+        <ksession name="customAccFunctionKsession"/>
+    </kbase>
+</kmodule>

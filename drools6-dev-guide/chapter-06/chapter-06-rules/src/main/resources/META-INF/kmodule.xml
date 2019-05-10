@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kmodule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xmlns="http://jboss.org/kie/6.0.0/kmodule">
+
+    <kbase name="cepKbase" eventProcessingMode="stream" packages="chapter06.cep">
+        <ksession name="cepKsession"/>
+    </kbase>
+    
+    <kbase name="cepConfigKbase" eventProcessingMode="stream" packages="chapter06.cep2">
+        <ksession name="cepConfigKsessionPseudoClock" clockType="pseudo"/>
+        <ksession name="cepConfigKsessionRealtimeClock" clockType="realtime"/>
+    </kbase>
+    
+</kmodule>

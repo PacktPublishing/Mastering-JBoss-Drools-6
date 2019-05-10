@@ -1,0 +1,18 @@
+package chapter09.otn;
+
+import org.drools.devguide.eshop.model.Customer;
+import org.drools.devguide.eshop.model.Order;
+
+rule "Sample Rule 1"
+when
+    $c: Customer()
+then
+    channels["customer-channel"].send($c);
+end
+
+rule "Sample Rule 2"
+when
+    $o: Order()
+then
+    channels["order-channel"].send($o);
+end

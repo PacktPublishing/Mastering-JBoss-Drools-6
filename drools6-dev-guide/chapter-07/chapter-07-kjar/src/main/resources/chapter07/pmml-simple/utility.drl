@@ -1,0 +1,5 @@
+package org.drools.pmml.pmml_4_2.test;
+
+query getNewCategory()
+    NewCategory($cat: value, valid == true)
+end

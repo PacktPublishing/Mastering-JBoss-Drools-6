@@ -1,0 +1,10 @@
+package chapter09.accumulate;
+
+import org.drools.devguide.eshop.model.Order;
+
+rule "Sample Rule 1"
+when
+    accumulate( Order(), $n: count(1))
+then
+    channels["audit-channel"].send($n);
+end

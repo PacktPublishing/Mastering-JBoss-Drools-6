@@ -1,0 +1,24 @@
+package chapter04.timersAndCalendars;
+
+import org.drools.devguide.eshop.model.Order;
+import org.drools.devguide.eshop.service.EmailService;
+
+global EmailService emailService;
+
+rule "Weekday notifications of pending orders"
+    calendars "weekdays"
+    timer (int:0 1h)
+    when
+        Order($id: orderId)
+    then
+        emailService.sendEmail("Pending order: "+$id);
+end
+rule "Weekend notifications of pending orders"
+    calendars "weekends"
+    timer (cron:0 0 0/8 * * ?)
+    when
+        Order($id: orderId)
+    then
+        emailService.sendEmail("Pending order: "+$id);
+end
+

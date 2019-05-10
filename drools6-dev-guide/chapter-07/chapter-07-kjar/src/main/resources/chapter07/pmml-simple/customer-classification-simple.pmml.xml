@@ -1,0 +1,56 @@
+<PMML xmlns="http://www.dmg.org/PMML-4_2" version="4.2">
+    <Header description="A simple decision tree model for customer categorization."/>
+    <DataDictionary numberOfFields="3">
+        <DataField name="previousCategory" optype="categorical" dataType="string">
+            <Value value="NA"/>
+            <Value value="BRONZE"/>
+            <Value value="SILVER"/>
+            <Value value="GOLD"/>
+        </DataField>
+        <DataField name="age" optype="continuous" dataType="integer"/>
+        <DataField name="result" optype="categorical" dataType="string">
+            <Value value="NO_CHANGE"/>
+            <Value value="NA"/>
+            <Value value="BRONZE"/>
+            <Value value="SILVER"/>
+            <Value value="GOLD"/>
+        </DataField>
+    </DataDictionary>
+    <TreeModel modelName="simple_customer_classification" functionName="classification">
+        <MiningSchema>
+            <MiningField name="previousCategory"/>
+            <MiningField name="age"/>
+            <MiningField name="result" usageType="predicted"/>
+        </MiningSchema>
+        <Output>
+            <OutputField name="newCategory" targetField="result" />
+        </Output>
+        <Node score="NO_CHANGE">
+            <True/>
+            <Node score="NO_CHANGE">
+                <SimplePredicate field="previousCategory" operator="notEqual" value="NA"/>
+            </Node>
+            <Node score="NA">
+                <CompoundPredicate booleanOperator="and">
+                    <SimplePredicate field="age" operator="greaterThan" value="18"/>
+                    <SimplePredicate field="age" operator="lessOrEqual" value="21"/>
+                </CompoundPredicate>
+            </Node>
+            <Node score="BRONZE">
+                <CompoundPredicate booleanOperator="and">
+                    <SimplePredicate field="age" operator="greaterThan" value="21"/>
+                    <SimplePredicate field="age" operator="lessOrEqual" value="30"/>
+                </CompoundPredicate>
+            </Node>
+            <Node score="SILVER">
+                <CompoundPredicate booleanOperator="and">
+                    <SimplePredicate field="age" operator="greaterThan" value="30"/>
+                    <SimplePredicate field="age" operator="lessOrEqual" value="40"/>
+                </CompoundPredicate>
+            </Node>
+            <Node score="GOLD">
+                <SimplePredicate field="previousCategory" operator="greaterThan" value="40"/>
+            </Node>
+        </Node>
+    </TreeModel>
+</PMML>

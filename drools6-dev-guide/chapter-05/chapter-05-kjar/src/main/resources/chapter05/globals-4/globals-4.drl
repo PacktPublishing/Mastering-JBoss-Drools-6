@@ -1,0 +1,31 @@
+package chapter05.globals4;
+
+import org.drools.devguide.eshop.model.Customer;
+import org.drools.devguide.eshop.model.Order;
+import org.drools.devguide.eshop.model.OrderState;
+import org.drools.devguide.eshop.model.SuspiciousOperation;
+import org.drools.devguide.eshop.service.OrderService;
+
+import java.util.Set;
+
+global Double amountThreshold;
+global OrderService orderService;
+global Set results;
+
+rule "Detect suspicious amount operations"
+when
+    $c: Customer()
+    Number( doubleValue > amountThreshold ) from accumulate (
+        Order ( state != OrderState.COMPLETED, $total: total) from orderService.getOrdersByCustomer($c.customerId),
+        sum($total)
+    )
+then
+    insert(new SuspiciousOperation($c, SuspiciousOperation.Type.SUSPICIOUS_AMOUNT));
+end
+
+rule "Collect results"
+when
+    $so: SuspiciousOperation()
+then
+    results.add($so);
+end

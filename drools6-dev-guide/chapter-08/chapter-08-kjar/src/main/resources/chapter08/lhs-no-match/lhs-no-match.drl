@@ -1,0 +1,47 @@
+package chapter08.nomatch;
+
+import org.drools.devguide.eshop.model.Discount;
+import org.drools.devguide.eshop.model.Customer;
+import org.drools.devguide.eshop.model.Customer.Category;
+import org.drools.devguide.eshop.model.Item;
+import org.drools.devguide.eshop.model.Order;
+import org.drools.devguide.eshop.model.SuspiciousOperation;
+import org.drools.devguide.eshop.service.SuspiciousOperationService;
+
+import java.util.Collection;
+import java.util.List;
+
+global SuspiciousOperationService suspiciousOperationService;
+
+rule "Detect suspicious discount operations"
+when
+    $c: Customer()
+    $o: Order(customer == $c)
+    Item(id > 90.0) from $o.discount
+    
+    //The line above is wrong. The idea was to show how type mismatches when
+    //using a "from" are not detected as errors by Drools.
+    //The line above should have look like the one below.
+    //Discount(percentage > 90.0) from $o.discount
+then
+    insert(new SuspiciousOperation($c, SuspiciousOperation.Type.SUSPICIOUS_DISCOUNT));
+end
+
+rule "Low category of GOLD customers with suspicious operations"
+when
+    $c: Customer(category == Category.GOLD)
+    Collection(size > 3) from suspiciousOperationService.getSuspiciousOperationsByCustomer($c.customerId)
+
+    //The line above is wrong. When the RHS of a "from" is a collection, Drools
+    //will implicitly loop over each of its elements. This means that the RHS
+    //of the "from" will never be a Collection.
+    //The correct way to write the pattern is commented below.
+    //List(size > 3) from collect (SuspiciousOperation() from suspiciousOperationService.getSuspiciousOperationsByCustomer($c.customerId))
+then
+    modify($c){setCategory(Category.SILVER)};
+end
+
+
+query "Get All Suspicious Operations"
+    $so: SuspiciousOperation()
+end

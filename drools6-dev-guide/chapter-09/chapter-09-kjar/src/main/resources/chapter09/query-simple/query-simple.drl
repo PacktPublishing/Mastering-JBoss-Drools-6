@@ -1,0 +1,8 @@
+package chapter09.query.simple;
+
+import org.drools.devguide.eshop.model.Item;
+import org.drools.devguide.chapter09.model.IsPartOf;
+
+query isItemContainedIn(Item p, Item w) 
+    IsPartOf(whole == w,  part == p)
+end

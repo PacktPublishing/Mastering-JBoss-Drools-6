@@ -1,0 +1,90 @@
+package chapter06.cep;
+
+import org.drools.devguide.eshop.events.TransactionEvent;
+
+declare SuspiciousCustomerEvent
+    @role(event)
+    customerId: Long
+    reason: String
+end
+
+declare AlarmTriggered
+    customerId: Long
+end
+
+rule "More than 10 transactions in an hour from one client"
+    when
+        $t1: TransactionEvent($cId: customerId)
+        Number(intValue >= 10) from accumulate(
+            $t2: TransactionEvent(
+                this != $t1, 
+                customerId == $cId, 
+                this meets[1h] $t1
+            ),
+            count($t2)
+        )
+        not (SuspiciousCustomerEvent(customerId == $cId, reason == "Many transactions"))
+    then
+        insert(new SuspiciousCustomerEvent($cId, "Many transactions"));
+end
+
+rule "More than 1 transaction of 200 dollars in an hour from the same client"
+    when
+        $t1: TransactionEvent($cId: customerId, totalAmount >= 200.0)
+        $t2: TransactionEvent(
+            this != $t1, 
+            this meets[1h] $t1, 
+            customerId == $cId, 
+            totalAmount >= 200.0
+        )
+        not (SuspiciousCustomerEvent(customerId == $cId, reason == "Two large transactions"))
+    then
+        insert(new SuspiciousCustomerEvent($cId, "Two large transactions"));
+end
+
+rule "More than 3 suspicious cases in the day and we warn the owner"
+    when
+        SuspiciousCustomerEvent($cId: customerId)
+        not (AlarmTriggered(customerId == $cId))
+        Number(intValue >= 2) from accumulate(
+            $s: SuspiciousCustomerEvent(customerId == $cId),
+            count($s)
+        )
+    then
+        //warn the owner
+        System.out.println("WARNING: Suspicious fraud case. Client " + $cId);
+        insert(new AlarmTriggered($cId));
+end
+
+
+rule "More than 10 transactions in an hour from small client portal"
+    when
+        $t1: TransactionEvent($cId: customerId) from entry-point "small-client-portal"
+        Number(intValue >= 10) from accumulate(
+            $t2: TransactionEvent(
+                this != $t1, 
+                customerId == $cId, 
+                this meets[1h] $t1
+            ) from entry-point "small-client-portal",
+            count($t2)
+        )
+        not (SuspiciousCustomerEvent(customerId == $cId, reason == "Many transactions"))
+    then
+        insert(new SuspiciousCustomerEvent($cId, "Many transactions"));
+end
+
+rule "More than 100 transactions in an hour from big client portal"
+    when
+        $t1: TransactionEvent($cId: customerId) from entry-point "big-client-portal"
+        Number(intValue >= 100) from accumulate(
+            $t2: TransactionEvent(
+                this != $t1, 
+                customerId == $cId, 
+                this meets[1h] $t1
+            ) from entry-point "big-client-portal",
+            count($t2)
+        )
+        not (SuspiciousCustomerEvent(customerId == $cId, reason == "Many transactions"))
+    then
+        insert(new SuspiciousCustomerEvent($cId, "Many transactions"));
+end

@@ -1,0 +1,43 @@
+package chapter07.dsl.simple;
+
+import org.drools.devguide.eshop.model.Customer;
+
+rule "Categorize Customers between 18 and 21"
+avoid looping
+when
+    There is a Customer
+        - with age between 18 and 21
+        - without a Category set
+then
+    Set Customer Category to NA
+end
+
+rule "Categorize Customers between 22 and 30"
+avoid looping
+when
+    There is a Customer
+        - with age between 22 and 30
+        - without a Category set
+then
+    Set Customer Category to BRONZE
+end
+
+rule "Categorize Customers between 31 and 40"
+avoid looping
+when
+    There is a Customer
+        - with age between 31 and 40
+        - without a Category set
+then
+    Set Customer Category to SILVER
+end
+
+rule "Categorize Customers older than 40"
+avoid looping
+when
+    There is a Customer
+        - who is older than 40
+        - without a Category set
+then
+    Set Customer Category to GOLD
+end

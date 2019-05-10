@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kmodule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xmlns="http://jboss.org/kie/6.0.0/kmodule">
+  <kbase name="wmModificationKbase" packages="chapter04.workingMemoryModif">
+    <ksession name="wmModificationKsession"/>
+  </kbase>
+
+  <kbase name="ruleAttributesKbase" packages="chapter04.ruleAttributes">
+    <ksession name="ruleAttributesKsession"/>
+  </kbase>
+  
+  <kbase name="ruleGroupingKbase" packages="chapter04.ruleGrouping">
+    <ksession name="ruleGroupingKsession"/>
+  </kbase>
+
+  <kbase name="timerCalendarKbase" packages="chapter04.timersAndCalendars">
+    <ksession name="timerCalendarKsession"/>
+  </kbase>
+
+  <kbase name="loopingExamplesKbase" packages="chapter04.loops">
+    <ksession name="loopingExamplesKsession"/>
+  </kbase>
+
+  <kbase name="declaredTypesKbase" packages="chapter04.declaredTypes">
+    <ksession name="declaredTypesKsession"/>
+  </kbase>
+  
+  <kbase name="propertyReactiveKbase" packages="chapter04.propertyReactive">
+    <ksession name="propertyReactiveKsession"/>
+  </kbase>
+ 
+  <kbase name="collectKbase" packages="chapter04.collectRules">
+    <ksession name="collectKsession"/>
+  </kbase>
+  
+  <kbase name="accumulateKbase" packages="chapter04.accumRules">
+    <ksession name="accumKsession"/>
+  </kbase>
+
+  <kbase name="condElemsKbase" packages="chapter04.conditionalElements">
+    <ksession name="condElemsKsession"/>
+  </kbase>
+
+  <kbase name="traitsKbase" packages="chapter04.traits">
+    <ksession name="traitsKsession"/>
+  </kbase>
+
+  <kbase name="ruleExceptionsKbase" equalsBehavior="equality" packages="chapter04.ruleExceptions">
+    <ksession name="ruleExceptionsKsession" beliefSystem="defeasible"/>
+  </kbase>
+</kmodule>

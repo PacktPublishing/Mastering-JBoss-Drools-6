@@ -1,0 +1,17 @@
+/**
+This DRL shows how a static method can be imported an used as a function in Drools.
+**/
+package chapter05.functions;
+
+import org.drools.devguide.eshop.model.Customer;
+
+import function org.drools.devguide.chapter05.utils.CustomerUtils.formatCustomer;
+
+global java.util.List globalList;
+
+rule "Prepare Customers List"
+when
+    $c: Customer()
+then
+    globalList.add(formatCustomer($c));
+end

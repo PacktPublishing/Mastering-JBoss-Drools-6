@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.drools.devguide</groupId>
+        <artifactId>chapter-11-kie-server</artifactId>
+        <version>0.1-SNAPSHOT</version>  
+    </parent>
+    <artifactId>kie-server-tests</artifactId>
+    <packaging>jar</packaging>
+    <name>Drools 6 Developer Guide - Chapter 11: KIE Execution Server Tests</name>
+    <dependencies>
+        <dependency>
+            <groupId>org.drools.devguide</groupId>
+            <artifactId>model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.drools.devguide</groupId>
+            <artifactId>kie-server-war</artifactId>
+            <type>war</type>
+            <classifier>custom</classifier>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.server</groupId>
+            <artifactId>kie-server-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.remote</groupId>
+            <artifactId>kie-remote-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-appclient</artifactId>
+            <version>${org.wildfly.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-arquillian-container-embedded</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-embedded</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>process-test-classes</phase>
+                        <goals>
+                             <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.wildfly</groupId>
+                                    <artifactId>wildfly-dist</artifactId>
+                                    <version>${org.wildfly.version}</version>
+                                    <type>zip</type>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>target</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <!-- After we have wildfly installed, we copy some config files -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>wildfly-prepare</id>
+                        <phase>process-test-classes</phase>
+                        <!--phase>compile</phase-->
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <property name="wildfly.dir" value="${project.basedir}/target/wildfly-${org.wildfly.version}"/>
+                                <echo message=">>>> copying from ${project.basedir}/src/test/resources to ${wildfly.dir}/standalone/configuration/"/>
+                                <copy file="${project.basedir}/src/test/resources/application-users.properties"
+                                      tofile="${wildfly.dir}/standalone/configuration/application-users.properties"
+                                      overwrite="true"/>
+                                <copy file="${project.basedir}/src/test/resources/application-roles.properties"
+                                      tofile="${wildfly.dir}/standalone/configuration/application-roles.properties"
+                                      overwrite="true"/>
+                                <copy file="${project.basedir}/src/test/resources/standalone.xml"
+                                      tofile="${wildfly.dir}/standalone/configuration/standalone.xml"
+                                      overwrite="true"/>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <!-- Fork every test because it will launch a separate AS instance -->
+                    <forkMode>always</forkMode>
+                    <systemPropertyVariables>
+                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                        <!-- the maven dependency plugin will have already downloaded the server on /target -->
+                        <jboss.home>${project.basedir}/target/wildfly-8.1.0.Final</jboss.home>
+                        <module.path>${project.basedir}/target/wildfly-8.1.0.Final/modules</module.path>
+                    </systemPropertyVariables>
+                    <redirectTestOutputToFile>false</redirectTestOutputToFile>
+                </configuration>
+            </plugin>        
+        </plugins>
+    </build>
+</project>

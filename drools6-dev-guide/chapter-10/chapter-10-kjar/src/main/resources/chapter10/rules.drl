@@ -1,0 +1,38 @@
+package rules;
+
+import org.kie.api.runtime.process.WorkflowProcessInstance;
+import org.drools.devguide.eshop.model.Manager;
+import org.drools.devguide.eshop.model.Order;
+import java.util.List;
+
+rule "There is a WorkflowProcessInstance fact"
+    when
+        $wi: WorkflowProcessInstance()
+    then
+        System.out.println(">> There is a WorkflowProcessInstance fact: "+$wi);
+end
+
+rule "There is a Process Order Instance"
+    when
+        $wi: WorkflowProcessInstance(processId == "process-order")
+    then
+        System.out.println(">> There is a Process Order Instance: "+$wi);
+end
+
+rule "Process Order Instance with a big order"
+    when
+        $wi: WorkflowProcessInstance(processId == "process-order", 
+                                   $o: getVariable("order") != null && ((Order)getVariable("order")).getTotal() > 1000)
+        
+    then
+        System.out.println(">> There is a Process Order Instance: "+$wi + " - with the following order total: "+((Order)$o).getTotal());
+        // We can abort or create another process instance to review this big orders here
+end
+
+rule "Too many orders for just one Manager"
+    when
+        List($managersCount:size > 0) from collect(Manager()) 
+        List(size > ($managersCount * 3)) from collect(WorkflowProcessInstance(processId == "process-order"))
+    then
+        System.out.println(">> There are more than 3 Process Order Flows per manager. Please hire more people :) ");
+end

@@ -1,0 +1,25 @@
+package chapter05.customOperator;
+
+import org.drools.devguide.eshop.model.Discount;
+import org.drools.devguide.eshop.model.Order;
+
+
+rule "Apply 0.1 discount to Orders with item 123"
+lock-on-active
+when
+    $o: Order(this containsItem 123) 
+then
+    modify ($o){ 
+        setDiscount(new Discount(0.1))
+    };
+end
+
+rule "Apply 0.05 discount to Orders without item 123"
+lock-on-active
+when
+    $o: Order(this not containsItem 123) 
+then
+    modify ($o){ 
+        setDiscount(new Discount(0.05))
+    };
+end

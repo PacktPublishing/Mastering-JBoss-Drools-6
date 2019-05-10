@@ -1,0 +1,11 @@
+package chapter04.collectRules
+
+import org.drools.devguide.eshop.model.Order
+import java.util.List
+
+rule "Grouping orders"
+    when
+      $list: List() from collect(Order())
+    then
+      System.out.println("we've found " + $list.size() + " orders");
+end

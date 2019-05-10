@@ -1,0 +1,36 @@
+package chapter04.traits
+
+import org.drools.devguide.eshop.model.OrderLine;
+import org.drools.devguide.eshop.traits.TraitableItem;
+import org.drools.devguide.eshop.traits.TraitableOrder;
+
+declare trait KidFriendly
+    kidAppeal: String
+end
+
+rule "toy items are kid friendly"
+    no-loop
+    when 
+        $i: TraitableItem(name contains "toy")
+    then
+        KidFriendly kf = don($i, KidFriendly.class);
+        kf.setKidAppeal("can play with it");
+end
+
+rule "school based orders are kid friendly"
+    no-loop
+    when 
+        $o: TraitableOrder($items: orderLines)
+        OrderLine(item.name contains "school") from $items
+    then
+        KidFriendly kf = don($o, KidFriendly.class);
+        kf.setKidAppeal("can study with it");
+end
+
+rule "Advertise kid friendly element"
+    when 
+        $kf: KidFriendly($ka: kidAppeal)
+    then
+        System.out.println("The element "+$kf+ 
+            " is kid friendly because " + $ka);
+end

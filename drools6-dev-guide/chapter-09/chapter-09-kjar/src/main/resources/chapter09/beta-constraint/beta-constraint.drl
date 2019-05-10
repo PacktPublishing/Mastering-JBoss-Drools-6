@@ -1,0 +1,12 @@
+package chapter09.beta;
+
+import org.drools.devguide.eshop.model.Provider;
+import org.drools.devguide.eshop.model.ProviderRequest;
+
+rule "Sample Rule 1"
+when
+    $p:  Provider(rating > 50)
+    $pr: ProviderRequest(this == $p)
+then
+    channels["request-channel"].send($pr);
+end

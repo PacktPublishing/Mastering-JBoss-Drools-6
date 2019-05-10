@@ -1,0 +1,17 @@
+<kie-server-state>
+  <controllers/>
+  <configuration>
+    <configItems/>
+  </configuration>
+  <containers>
+    <container>
+      <containerId>my-deploy</containerId>
+      <releaseId>
+        <groupId>org.drools.devguide</groupId>
+        <artifactId>chapter-11-kjar</artifactId>
+        <version>0.1-SNAPSHOT</version>
+      </releaseId>
+      <status>STARTED</status>
+    </container>
+  </containers>
+</kie-server-state>

@@ -1,0 +1,21 @@
+template header
+minAge
+maxAge
+previousCategory
+newCategory
+
+package chapter07.ruletemplate.simple;
+
+import org.drools.devguide.eshop.model.Customer;
+
+template "classification-rules"
+
+rule "Categorize Customers_@{row.rowNumber}"
+no-loop true
+when
+    $c: Customer(age >= @{minAge}, age <= @{maxAge}, category == Customer.Category.@{previousCategory})
+then
+    modify ($c){ setCategory(Customer.Category.@{newCategory})};
+end
+
+end template

@@ -1,0 +1,35 @@
+package chapter04.declaredTypes
+
+import org.drools.devguide.eshop.model.Order;
+import org.drools.devguide.eshop.model.Discount;
+
+declare SpecialOrder
+    whatsSoSpecialAboutIt: String
+    order: Order
+    applicableDiscount: Discount
+end
+
+rule "Larger than 20 items orders are special orders"
+    when
+        $o: Order(totalItems > 20)
+        not ( SpecialOrder (order == $o) )
+    then
+        Discount $d = new Discount(0.05);
+        insert(new SpecialOrder("Has many items", $o, $d)); 
+end
+
+rule "Larger than 100 dollars orders are special orders"
+    when
+        $o: Order(total> 100.00)
+        not ( SpecialOrder (order == $o) )
+    then
+        Discount $d = new Discount(0.05);
+        insert(new SpecialOrder("It's expensive", $o, $d)); 
+end
+
+rule "Apply special order discount"
+    when
+        SpecialOrder($d: applicableDiscount, $o: order)
+    then
+        $o.setDiscount($d);
+end

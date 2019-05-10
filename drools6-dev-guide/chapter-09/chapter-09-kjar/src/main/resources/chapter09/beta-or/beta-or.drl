@@ -1,0 +1,17 @@
+package chapter09.beta;
+
+import org.drools.devguide.eshop.model.Customer;
+import org.drools.devguide.eshop.model.Customer.Category;
+import org.drools.devguide.eshop.model.Order;
+import org.drools.devguide.eshop.model.SuspiciousOperation;
+
+rule "Sample Rule 1"
+when
+    $c: Customer(category != Category.GOLD)
+    (
+        Order(customer == $c, total > 10000) or
+        SuspiciousOperation(customer == $c)
+    )
+then
+    channels["suspicious-customer"].send($c);
+end

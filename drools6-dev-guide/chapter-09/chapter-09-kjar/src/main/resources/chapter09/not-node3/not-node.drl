@@ -1,0 +1,14 @@
+package chapter09.not;
+
+import org.drools.devguide.eshop.model.Customer;
+import org.drools.devguide.eshop.model.SuspiciousOperation;
+
+rule "Sample Rule 1"
+when
+    not (
+        $c: Customer() and
+        SuspiciousOperation(customer == $c)
+    )
+then
+    channels["audit-channel"].send("OK");
+end

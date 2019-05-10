@@ -1,0 +1,18 @@
+package chapter05.customAccFunction;
+
+import org.drools.devguide.eshop.model.Order;
+import org.drools.devguide.util.ObjectHolder;
+
+import accumulate org.drools.devguide.chapter05.acc.BiggestOrderFunction biggestOrder
+
+global ObjectHolder biggestOrder;
+
+rule "Find Biggest Order"
+when
+    $bigO: Order() from accumulate (
+        $o: Order(),
+        biggestOrder($o)
+    )
+then
+    biggestOrder.setObject($bigO);
+end

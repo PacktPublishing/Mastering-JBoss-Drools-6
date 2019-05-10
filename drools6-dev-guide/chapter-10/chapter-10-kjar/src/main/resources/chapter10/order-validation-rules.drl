@@ -1,0 +1,86 @@
+package rules;
+
+import org.drools.devguide.eshop.model.Order;
+import org.drools.devguide.eshop.model.Discount;
+import org.kie.api.runtime.process.WorkflowProcessInstance;
+import org.drools.devguide.eshop.model.OrderState;
+import org.drools.devguide.eshop.model.Customer.Category;
+
+import java.util.List;
+
+rule "Valid Order"
+    ruleflow-group "Validation"
+    
+    when
+        $wi: WorkflowProcessInstance(processId == "order-validation",  getVariable("valid") == "not-validated", 
+                                   $o: getVariable("order") != null && 
+                                        ((Order)getVariable("order")).getState() == OrderState.PENDING &&
+                                        ((Order)getVariable("order")).getOrderLines().size() > 0 &&
+                                        ((Order)getVariable("order")).getCustomer() != null)
+    then
+        System.out.println(">> Validating Order: "+$o);
+        $wi.setVariable("valid","validated"); 
+end
+
+
+rule "Empty Order"
+    ruleflow-group "Validation"
+    
+    when
+        $wi: WorkflowProcessInstance(processId == "order-validation",  getVariable("valid") == "not-validated", 
+                                   $o: getVariable("order") != null && 
+                                        ((Order)getVariable("order")).getOrderLines().size() == 0)
+    then
+        System.out.println(">> Validating Order: "+$o);
+        $wi.setVariable("valid","validation error: order must at least have one line"); 
+end
+
+rule "No Customer"
+    ruleflow-group "Validation"
+    when
+        $wi: WorkflowProcessInstance(processId == "order-validation",  getVariable("valid") == "not-validated", 
+                                   $o: getVariable("order") != null && 
+                                        ((Order)getVariable("order")).getCustomer() == null)
+    then
+        System.out.println(">> Validating Order: "+$o);
+        $wi.setVariable("valid","validation error: order must have a valid customer"); 
+end
+
+
+rule "Wrong Order State"
+    ruleflow-group "Validation"
+    
+    when
+        $wi: WorkflowProcessInstance(processId == "order-validation",  getVariable("valid") == "not-validated", 
+                                   $o: getVariable("order") != null && 
+                                        ((Order)getVariable("order")).getState() != OrderState.PENDING)
+    then
+        System.out.println(">> Validating Order: "+$o);
+        $wi.setVariable("valid","validation error: order must be in PENDING State"); 
+end
+
+
+rule "Simple Discount Based on Total Rule"
+    ruleflow-group "Discounts"
+    when
+        $wi: WorkflowProcessInstance(processId == "order-validation", getVariable("valid") == "validated", 
+                                   $o: getVariable("order") != null && ((Order)getVariable("order")).getTotal() > 1000)
+    then
+        System.out.println(">> Applying 10% discounts  to Order: "+$o);
+        ((Order)$o).setDiscount(new Discount(0.1));
+        $wi.setVariable("order",$o); 
+        $wi.setVariable("valid","discounted 10%"); 
+end
+
+rule "Simple Discount Based on Customer Category Rule"
+    ruleflow-group "Discounts"
+    when
+        $wi: WorkflowProcessInstance(processId == "order-validation", getVariable("valid") == "validated", 
+                                   $o: getVariable("order") != null && ((Order)getVariable("order")).getCustomer().getCategory() == Category.GOLD)
+    then
+        System.out.println(">> Applying 20% discounts to Order: "+$o);
+        ((Order)$o).setDiscount(new Discount(0.2));
+        $wi.setVariable("order",$o); 
+        $wi.setVariable("valid","discounted 20%"); 
+end
+

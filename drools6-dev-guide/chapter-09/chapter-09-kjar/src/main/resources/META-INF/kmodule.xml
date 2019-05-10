@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kmodule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://jboss.org/kie/6.0.0/kmodule">
+    <kbase name="OTNKBase" packages="chapter09.OTN"/>
+    <kbase name="AlphaSimpleKBase" packages="chapter09.alpha-simple"/>
+    <kbase name="AlphaORKBase" packages="chapter09.alpha-or"/>
+    <kbase name="AlphaNodeSharing1KBase" packages="chapter09.alpha-node-sharing1"/>
+    <kbase name="AlphaNodeSharing2KBase" packages="chapter09.alpha-node-sharing2"/>
+    <kbase name="BetaSimpleKBase" packages="chapter09.beta-simple"/>
+    <kbase name="BetaConstraintKBase" packages="chapter09.beta-constraint"/>
+    <kbase name="BetaNodeSharing1KBase" packages="chapter09.beta-node-sharing1"/>
+    <kbase name="BetaNodeSharing2KBase" packages="chapter09.beta-node-sharing2"/>
+    <kbase name="BetaNodeSharing3KBase" packages="chapter09.beta-node-sharing3"/>
+    <kbase name="BetaORKBase" packages="chapter09.beta-or"/>
+    <kbase name="BetaORSplitKBase" packages="chapter09.beta-or-split"/>
+    <kbase name="NotNode1KBase" packages="chapter09.not-node1"/>
+    <kbase name="NotNode2KBase" packages="chapter09.not-node2"/>
+    <kbase name="NotNode3KBase" packages="chapter09.not-node3"/>
+    <kbase name="ExistsNode1KBase" packages="chapter09.exists-node1"/>
+    <kbase name="ExistsNode2KBase" packages="chapter09.exists-node2"/>
+    <kbase name="AccumulateNode1KBase" packages="chapter09.accumulate-node1"/>
+    <kbase name="AccumulateNode2KBase" packages="chapter09.accumulate-node2"/>
+    <kbase name="FromNode1KBase" packages="chapter09.from-node1"/>
+
+    <kbase name="QuerySimpleKBase" packages="chapter09.query-simple"/>
+    <kbase name="QueryUnificationKBase" packages="chapter09.query-unification"/>
+    <kbase name="QueryPositionalKBase" packages="chapter09.query-positional"/>
+    <kbase name="QueryBackwardChainingKBase" packages="chapter09.query-backward-chaining"/>
+
+    <kbase name="QueryBackwardChainingSampleKBase" packages="chapter09.query-backward-chaining-sample"/>
+</kmodule>

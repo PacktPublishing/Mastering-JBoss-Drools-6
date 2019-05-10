@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.drools.devguide</groupId>
+        <artifactId>chapter-11</artifactId>
+        <version>0.1-SNAPSHOT</version>  
+    </parent>
+    <artifactId>chapter-11-workbench-tests</artifactId>
+    <packaging>jar</packaging>
+    <name>Drools 6 Developer Guide - Chapter 11: KIE Workbench Tests</name>
+    <dependencies>
+        <dependency>
+            <groupId>org.drools.devguide</groupId>
+            <artifactId>model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.drools.devguide</groupId>
+            <artifactId>kie-server-war</artifactId>
+            <type>war</type>
+            <classifier>custom</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.kie</groupId>
+            <artifactId>kie-wb-distribution-wars</artifactId>
+            <type>war</type>
+            <classifier>wildfly8</classifier>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-arquillian-container-embedded</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-embedded</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+            <properties>
+                <script.extension>.bat</script.extension>
+            </properties>
+        </profile>
+        <profile>
+            <id>unix</id>
+            <activation>
+                <os>
+                    <family>!Windows</family>
+                </os>
+            </activation>
+            <properties>
+                <script.extension>.sh</script.extension>
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>process-test-classes</phase>
+                        <goals>
+                             <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.wildfly</groupId>
+                                    <artifactId>wildfly-dist</artifactId>
+                                    <version>${org.wildfly.version}</version>
+                                    <type>zip</type>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>target</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copydep</id>
+                        <phase>process-test-classes</phase>
+                        <goals>
+                             <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeClassifiers>wildfly8,custom</includeClassifiers>
+                            <outputDirectory>target</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <!-- After we have wildfly installed, we copy some config files -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>wildfly-prepare</id>
+                        <phase>process-test-classes</phase>
+                        <!--phase>compile</phase-->
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <property name="wildfly.dir" value="${project.basedir}/target/wildfly-${org.wildfly.version}"/>
+                                <echo message=">>>> copy from ${project.basedir}/src/main/resources to ${wildfly.dir}/standalone/configuration/"/>
+                                <copy file="${project.basedir}/src/main/resources/application-users.properties"
+                                      tofile="${wildfly.dir}/standalone/configuration/application-users.properties"
+                                      overwrite="true"/>
+                                <copy file="${project.basedir}/src/main/resources/application-roles.properties"
+                                      tofile="${wildfly.dir}/standalone/configuration/application-roles.properties"
+                                      overwrite="true"/>
+                                <copy file="${project.basedir}/src/main/resources/standalone.xml"
+                                      tofile="${wildfly.dir}/standalone/configuration/standalone.xml"
+                                      overwrite="true"/>
+                                <copy file="${project.basedir}/target/kie-wb-distribution-wars-${drools.version}-wildfly8.war"
+                                      tofile="${wildfly.dir}/standalone/deployments/kie-wb.war"
+                                      overwrite="true"/>
+                                <copy file="${project.basedir}/target/kie-server-war-${project.version}-custom.war"
+                                      tofile="${wildfly.dir}/standalone/deployments/kie-server.war"
+                                      overwrite="true"/>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

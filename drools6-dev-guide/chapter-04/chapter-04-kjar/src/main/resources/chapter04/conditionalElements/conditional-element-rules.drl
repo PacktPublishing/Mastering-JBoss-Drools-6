@@ -1,0 +1,22 @@
+package chapter04.conditionalElements
+
+import org.drools.devguide.eshop.model.Order;
+import org.drools.devguide.eshop.model.Item;
+
+rule "warn about empty working memory"
+    when
+        not(Order() or Item())
+    then
+        System.out.println("we don’t have elements");
+end
+
+rule "make sure all orders have at least one line"
+    when
+        exists(Order())
+        forall(
+            Order()
+            Order(orderLines.size() > 0)
+        )
+    then
+        System.out.println("all orders have lines");
+end

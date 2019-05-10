@@ -1,0 +1,45 @@
+package chapter04.loops;
+
+import org.drools.devguide.eshop.model.Order;
+import org.drools.devguide.eshop.model.Item;
+
+rule "Apply 10% discount on notepads"
+    agenda-group "withoutNoLoop"
+    when $i: Item(name == "notepad")
+    then modify($i){setSalePrice($i.getSalePrice()*0.9);}
+end
+
+rule "Apply 10% discount on notepads BUT ONLY ONCE"
+    no-loop true
+    agenda-group "withNoLoop"
+    when $i: Item(name == "notepad")
+    then modify($i){setSalePrice($i.getSalePrice()*0.9);}
+end
+
+rule "Give extra 2% discount for orders larger than 15 items"
+    agenda-group "withoutLockOnActive"
+    no-loop true
+    when $o: Order(totalItems > 15)
+    then modify ($o) { increaseDiscount(0.02); }
+end
+
+rule "Give extra 2% discount for orders larger than $100"
+    agenda-group "withoutLockOnActive"
+    no-loop true
+    when $o: Order(total > 100.00)
+    then modify ($o) { increaseDiscount(0.02); }
+end
+
+rule "Give extra 2% discount for orders larger than 15 items ONCE"
+    agenda-group "withLockOnActive"
+    lock-on-active true
+    when $o: Order(totalItems > 15)
+    then modify ($o) { increaseDiscount(0.02); }
+end
+
+rule "Give extra 2% discount for orders larger than $100 ONCE"
+    agenda-group "withLockOnActive"
+    lock-on-active true
+    when $o: Order(total > 100.00)
+    then modify ($o) { increaseDiscount(0.02); }
+end

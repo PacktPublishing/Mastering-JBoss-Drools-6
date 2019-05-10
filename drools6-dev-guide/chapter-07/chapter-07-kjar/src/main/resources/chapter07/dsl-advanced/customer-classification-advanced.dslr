@@ -1,0 +1,47 @@
+package chapter07.dsl.simple;
+
+use eshop model
+
+rule "Categorize Customers with less than 5 orders"
+avoid looping
+when
+    There is a Customer
+        - without a Category set
+    The Customer has less than 5 Orders    
+then
+    Update Customer
+        - set Category to NA
+end
+
+rule "Categorize Customers with 5 to 10 orders"
+avoid looping
+when
+    There is a Customer
+        - without a Category set
+    The Customer has between 5 and 10 Orders    
+then
+    Update Customer
+        - set Category to BRONZE
+end
+
+rule "Categorize Customers with 11 to 20 Orders"
+avoid looping
+when
+    There is a Customer
+        - without a Category set
+    The Customer has between 11 and 20 Orders    
+then
+    Update Customer
+        - set Category to SILVER
+end
+
+rule "Categorize Customers with more than 20 Orders"
+avoid looping
+when
+    There is a Customer
+        - without a Category set
+    The Customer has more than 20 Orders    
+then
+    Update Customer
+        - set Category to GOLD
+end

@@ -1,0 +1,55 @@
+package chapter04.workingMemoryModif;
+
+import org.drools.devguide.eshop.model.Coupon;
+import org.drools.devguide.eshop.model.Customer;
+import org.drools.devguide.eshop.types.IsGoldCustomer;
+import org.drools.devguide.eshop.types.IsLowRangeItem;
+import org.drools.devguide.eshop.model.Item;
+import org.drools.devguide.eshop.model.Order;
+
+import java.util.Date;
+
+rule "Classify Customer - Gold"
+    when
+        $c: Customer( category == Customer.Category.GOLD )
+    then
+        insert(new IsGoldCustomer($c));
+end
+
+rule "Classify Item - Low price"
+    when
+        $i: Item(cost < 10.00)
+    then
+        insert(new IsLowRangeItem($i));
+end
+
+rule "Suggest gift"
+    when
+        IsGoldCustomer($c: customer)
+        IsLowRangeItem($i: item)
+    then
+        System.out.println("Suggest giving a gift of item "+$i.getName()+" to customer "+$c.getName());
+end
+
+rule "Categorize Customer - Gold"
+    when
+        $c: Customer( category == Customer.Category.NA )
+        $o: Order(customer == $c, orderLines.size() > 10)
+    then
+        modify($c) { setCategory(Customer.Category.GOLD); }
+end
+
+rule "Expire coupons"
+    when
+        $cp: Coupon( eval(new Date().after($cp.getValidUntil())) )
+    then
+        delete($cp);
+end
+
+rule "Execute coupon"
+    when
+        $o: Order()
+        $cp: Coupon(order == $o) 
+    then
+        System.out.println("We have a coupon for this order!");
+end

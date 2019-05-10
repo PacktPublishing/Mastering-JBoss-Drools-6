@@ -1,0 +1,28 @@
+package chapter08.matchcancelled;
+
+import org.drools.devguide.eshop.model.Discount;
+import org.drools.devguide.eshop.model.Customer;
+import org.drools.devguide.eshop.model.Customer.Category;
+import org.drools.devguide.eshop.model.Item;
+import org.drools.devguide.eshop.model.Order;
+import org.drools.devguide.eshop.model.SuspiciousOperation;
+
+import java.util.Collection;
+import java.util.List;
+
+rule "Categorize Customers between 22 and 30"
+salience 100
+when
+    $c: Customer(age > 21, age < 31, category != Category.BRONZE)
+then
+    modify($c){setCategory(Category.BRONZE)};
+end
+
+rule "Low category of GOLD customers with suspicious operations"
+salience 10
+when
+    $c: Customer(category == Category.GOLD)
+    List(size > 3) from collect (SuspiciousOperation(customer == $c))
+then
+    modify($c){setCategory(Category.SILVER)};
+end

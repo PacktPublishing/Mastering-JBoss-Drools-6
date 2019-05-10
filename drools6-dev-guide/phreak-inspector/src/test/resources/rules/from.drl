@@ -1,0 +1,28 @@
+package chapter09.matchcancelled;
+
+import org.drools.devguide.eshop.model.Discount;
+import org.drools.devguide.eshop.model.Customer;
+import org.drools.devguide.eshop.model.Customer.Category;
+import org.drools.devguide.eshop.model.Item;
+import org.drools.devguide.eshop.model.Order;
+import org.drools.devguide.eshop.model.OrderLine;
+import org.drools.devguide.eshop.model.SuspiciousOperation;
+
+import java.util.Collection;
+import java.util.List;
+
+global java.util.List facts
+
+rule A
+when
+    Customer() from facts
+then
+end
+
+
+rule "overcrowded room"
+   when
+       $o: Order()
+       List($amount: size > 3) from collect (OrderLine() from $o.getOrderLines())
+   then
+end

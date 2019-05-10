@@ -1,0 +1,16 @@
+package rules;
+
+import org.drools.devguide.eshop.model.Customer;
+import org.drools.devguide.eshop.model.Order;
+import org.drools.devguide.eshop.model.Discount;
+
+
+rule "Silver Customers - 10% Discount"
+    when
+        $o: Order( $customer: customer, discount == null )
+        $c: Customer( category == Category.SILVER, this == $customer )
+    then
+        System.out.println("Executing Silver Customer 10% Discount Rule!");
+        $o.setDiscount(new Discount(10.0));
+        update($o);
+end

@@ -1,0 +1,14 @@
+package chapter11camel;
+
+import java.util.List;
+import org.drools.devguide.eshop.model.Item;
+
+global List list;
+
+rule "Add item to global list"
+    when
+        $i: Item()
+    then
+        list.add($i);
+end 
+

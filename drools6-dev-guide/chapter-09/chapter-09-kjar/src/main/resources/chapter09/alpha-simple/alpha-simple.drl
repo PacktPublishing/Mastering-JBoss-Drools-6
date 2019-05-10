@@ -1,0 +1,11 @@
+package chapter09.alpha;
+
+import org.drools.devguide.eshop.model.Customer;
+import org.drools.devguide.eshop.model.Customer.Category;
+
+rule "Sample Rule 1"
+when
+    $c: Customer(age > 30, category == Category.GOLD)
+then
+    channels["customer-channel"].send($c);
+end
