@@ -18,7 +18,7 @@
         <hamcrest.version>1.3</hamcrest.version>
         <weld.version>1.1.28.Final</weld.version>
         <hsqldb.version>2.3.3</hsqldb.version>
-        <commons.io.version>2.4</commons.io.version>
+        <commons.io.version>2.7</commons.io.version>
         <commons.lang.version>2.6</commons.lang.version>
         <antlr.st.version>4.0.8</antlr.st.version>
         <logback.version>1.1.3</logback.version>
