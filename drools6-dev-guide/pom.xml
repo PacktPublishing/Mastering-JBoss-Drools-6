@@ -23,7 +23,7 @@
         <antlr.st.version>4.0.8</antlr.st.version>
         <logback.version>1.1.3</logback.version>
         <btm.version>2.1.4</btm.version>
-        <h2.version>1.3.168</h2.version>
+        <h2.version>2.0.206</h2.version>
         <hibernate.version>4.2.17.Final</hibernate.version>
         <jpa.api.version>1.0.1.Final</jpa.api.version>
         <spring.version>4.2.1.RELEASE</spring.version>
