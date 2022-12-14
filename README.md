@@ -1,3 +1,15 @@
+
+### Get this product for $5
+
+<i>Packt is having its biggest sale of the year. Get this eBook or any other book, video, or course that you like just for $5 each</i>
+
+
+<b><p align='center'>[Buy now](https://packt.link/9781783288625)</p></b>
+
+
+<b><p align='center'>[Buy similar titles for just $5](https://subscription.packtpub.com/search)</p></b>
+
+
 # Mastering JBoss Drools 6 
 
 <a href="https://prod.packtpub.com/in/networking-and-servers/mastering-jboss-drools-6?utm_source=github&utm_medium=repository&utm_campaign=9781783288625">  <img src="https://prod.packtpub.com/media/catalog/product/cache/e4d64343b1bc593f1c5348fe05efa4a6/1/5/1512_8625os_mastering20jboss20drools206_0.jpg" alt="Mastering JBoss Drools 6" height="256px" align="right"></a>
